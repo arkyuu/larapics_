@@ -16,4 +16,26 @@ class Image extends Model
         Storage::makeDirectory($subFolder);
         return $subFolder;
     }
+
+    public static function getDimension($image)
+    {
+        [$width, $height] = getimagesize(Storage::path($image));
+        return $width . "x" . $height;
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true);
+    }
+
+    public function fileUrl()
+    {
+        $path = "/storage/" . $this->file;
+        return $path;
+    }
+
+    public function permalink()
+    {
+        return route('images.show', $this->slug);
+    }
 }
